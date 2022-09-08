@@ -1,0 +1,81 @@
+def buildQuery(page, term) {
+        def queryManager = session.workspace.queryManager;
+       def statement = 'select * from nt:base where jcr:path like \''+page.path+'/%\' and sling:resourceType = \'' + term + '\'';
+        queryManager.createQuery(statement, 'sql');
+    }
+ 
+    /*Defined Content Hierarchy */
+    def replicator = getService("com.day.cq.replication.Replicator")
+   final def page = getPage('/content/myproject')
+   /*Component ResourceType which is searched in the content hierarchy */
+   final def query = buildQuery(page, 'my-project/components/inner');
+   final def result = query.execute()
+   def Map<String, Value[]> map ;
+   def  Map<String, Value> singleMap ;
+   
+ 
+   count = 0;
+   result.nodes.each { node ->
+        Node siblingNode = findNextSibling(node.getParent(), node);
+        
+        map = new HashMap<>();
+        singleMap = new HashMap<>();
+        PropertyIterator pi = node.getProperties();
+        while(pi.hasNext()) {
+    	    Property p = pi.nextProperty();
+        	if(p.isMultiple() ) {
+        		map.put(p.getName(), p.getValues());
+        	}else {
+        	    if(!p.getDefinition().isProtected()){
+        	       singleMap.put(p.getName(), p.getValue());
+        		}
+        	}
+        }
+        session.move(node.getPath(), node.getParent().getPath() + "/inner-wrapper"+count );
+        node.set("sling:resourceType", "my-project/components/inner-wrapper");
+       
+        count++;
+   
+        if(siblingNode != null){
+            node.getParent().orderBefore(node.name, siblingNode.name);
+        }
+        
+        
+        Node original_node = node.addNode(node.getPath()+"/inner");
+        for(String key : map.keySet()){
+            original_node.setProperty(key, map.get(key).toString());
+        }
+        for(String key : singleMap.keySet()){
+            original_node.setProperty(key, singleMap.get(key).getString());
+        }
+        session.save();
+ }
+
+getPage(path).recurse { page ->
+    def content = page.node
+    def replicationStatus = replicator.getReplicationStatus(session, page.path)
+    if(!replicationStatus.isActivated()) {
+        replicator.replicate(session, ReplicationActionType.ACTIVATE, page.path);
+    }else{
+        println(page.path);
+    }
+}
+ 
+ def Node findNextSibling(Node parent, Node node){
+    
+     NodeIterator it = parent.iterator();
+     boolean flag = false;
+     while(it.hasNext()){
+         Node n = it.nextNode();
+         if(flag){
+             return n;
+         }
+         if(n.name == node.name){
+            flag = true;
+         }
+     }
+     return null;
+ }
+
+ println 'No Of Pages found :' + result.nodes.size();
+
