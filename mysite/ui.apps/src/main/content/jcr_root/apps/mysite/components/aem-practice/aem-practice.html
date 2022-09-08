@@ -1,0 +1,14 @@
+<sly data-sly-use.component="com.greendot.aem.core.sling.models.flexwebv2.AemPracticeModel">
+<h1>Title from Dialog : ${component.title}</h1>
+<h1>Image Path if present: ${component.imagePath}</h1>
+
+<ul data-sly-list="${component.navigationItems}">
+	<li>
+	<span data-sly-element="${itemList.first ? 'b' : (itemList.last ? 'i' : 'span') }">
+    ${item.title} ${item.path}
+    </span>
+    </li>
+</ul>
+
+<h1 data-sly-test="${component.runMode}">Author Mode</h1>
+</sly>
