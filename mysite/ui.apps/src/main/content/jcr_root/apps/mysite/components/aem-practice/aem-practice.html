@@ -1,3 +1,7 @@
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" >
+   <sly data-sly-call="${clientLib.css @ categories='myproject.aempractice'}"></sly>
+</sly>
+
 <sly data-sly-use.component="com.greendot.aem.core.sling.models.flexwebv2.AemPracticeModel">
 <h1>Title from Dialog : ${component.title}</h1>
 <h1>Image Path if present: ${component.imagePath}</h1>
@@ -11,4 +15,7 @@
 </ul>
 
 <h1 data-sly-test="${component.runMode}">Author Mode</h1>
+</sly>
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" >
+   <sly data-sly-call="${clientLib.js @ categories='myproject.aempractice'}"></sly>
 </sly>
