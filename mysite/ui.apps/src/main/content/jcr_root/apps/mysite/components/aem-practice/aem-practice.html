@@ -1,23 +1,23 @@
 <!--/* Clientlibs. */-->
-<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" >
-   <sly data-sly-call="${clientLib.css @ categories='myproject.aempractice'}"></sly>
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html">
+	<sly data-sly-call="${clientLib.css @ categories='myproject.aempractice'}"></sly>
 </sly>
 
 <!--/* Component Output */-->
 <sly data-sly-use.component="com.greendot.aem.core.sling.models.flexwebv2.AemPracticeModel">
-<h1>Title from Dialog : ${component.title}</h1>
-<h1>Image Path if present: ${component.imagePath}</h1>
+	<h1>Title from Dialog : ${component.title}</h1>
+	<h1>Image Path if present: ${component.imagePath}</h1>
 
-<ul data-sly-list="${component.navigationItems}">
-	<li>
-	<span data-sly-element="${itemList.first ? 'b' : (itemList.last ? 'i' : 'span') }">
-    		${item.title} ${item.path}
-    	</span>
-    	</li>
-</ul>
-<!--/* Component Output */-->	
+	<ul data-sly-list="${component.navigationItems}">
+		<li>
+			<span data-sly-element="${itemList.first ? 'b' : (itemList.last ? 'i' : 'span') }">
+				${item.title} ${item.path}
+			</span>
+		</li>
+	</ul>
+	<!--/* Component Output */-->
 
-<h1 data-sly-test="${component.runMode}">Author Mode</h1>
+	<h1 data-sly-test="${component.isRunMode}">Author Mode</h1>
 </sly>
 <!--/* title and Path of the Page */-->
 <h1>Page Path ${currentPage.path}</h1>
@@ -25,6 +25,6 @@
 <!--/* title and Path of the Page */-->
 
 <!--/* Clientlibs */-->
-<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html" >
-   <sly data-sly-call="${clientLib.js @ categories='myproject.aempractice'}"></sly>
+<sly data-sly-use.clientLib="/libs/granite/sightly/templates/clientlib.html">
+	<sly data-sly-call="${clientLib.js @ categories='myproject.aempractice'}"></sly>
 </sly>

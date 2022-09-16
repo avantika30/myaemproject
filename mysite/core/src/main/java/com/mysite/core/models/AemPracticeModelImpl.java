@@ -1,7 +1,7 @@
 package com.mysite.core.models;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
 import org.apache.sling.api.SlingHttpServletRequest;
@@ -15,35 +15,42 @@ import org.apache.sling.settings.SlingSettingsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Model(adaptables = { SlingHttpServletRequest.class,
+		Resource.class }, adapters = AemPracticeModel.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
+public class AemPracticeModelImpl implements AemPracticeModel {
 
+	private static final Logger log = LoggerFactory.getLogger(AemPracticeModelImpl.class);
 
-@Model(adaptables =  {SlingHttpServletRequest.class, Resource.class}, 
-adapters=AemPracticeModel.class, defaultInjectionStrategy = DefaultInjectionStrategy.OPTIONAL)
-public class AemPracticeModelImpl implements AemPracticeModel{
-	
+	private static final String PREFIX = "Test_prefix";
+	private static final String PATH = "/content/mysite/en_GB";
 
-	 private static final Logger log = LoggerFactory.getLogger(AemPracticeModelImpl.class);
+	/* Access Modifiers */
 	@ValueMapValue
-	String title;
-	
+	private String title;
+
+	/* Access Modifiers */
 	@ValueMapValue
-	String link_path;
-	
+	private String link_path;
+
+	/* Access Modifiers */
 	@ValueMapValue
-	boolean isBackground;
-	
-	@ChildResource
-	Resource navigationList;
-	
+	private boolean isBackground;
+
+	/* Child Resourced as List */
+	@ChildResource(name = "navigationList")
+	private List<NavigationItem> navigationList;
+
+	/* Access Modifiers */
 	@OSGiService
-	SlingSettingsService slingSettings;
-	
+	protected SlingSettingsService slingSettings;
+
 	@Override
 	public boolean isBackgroundImage() {
 		return isBackground;
 	}
+
 	@Override
-	public boolean getRunMode() {
+	public boolean isRunMode() {
 		return slingSettings.getRunModes().contains("author");
 	}
 
@@ -51,25 +58,21 @@ public class AemPracticeModelImpl implements AemPracticeModel{
 	public String getTitle() {
 		return title;
 	}
-	
+
 	@Override
 	public String getImagePath() {
-		if(isBackground && slingSettings.getRunModes().contains("publish")) {
-			return link_path;
-		}
-		return StringUtils.EMPTY;				
+		/* Ternary Operator used */
+		return isBackground && slingSettings.getRunModes().contains("publish") ? link_path : StringUtils.EMPTY;
 	}
 
 	@Override
-	public List<AemPracticeModel.NavigationItem> getNavigationItems() {
-		List<NavigationItem> list = new ArrayList<>();
-		navigationList.getChildren().forEach(item -> {
-			list.add(new NavigationItem(item.getValueMap().get("title", ""), item.getValueMap().get("page_path", "")));
-		});
-		return list;
+	public List<NavigationItem> getNavigationItems() {
+		/* Used Streams to filter items where path starts with a path and return updated object wherein Title is updated */
+		return navigationList.stream().filter(item -> item.getPath().startsWith(PATH)).map(item -> {
+			return new NavigationItem(PREFIX + item.getTitle(), item.getPath());
+		}).collect(Collectors.toList());
+
 	}
 
-	
-	
-
 }
+

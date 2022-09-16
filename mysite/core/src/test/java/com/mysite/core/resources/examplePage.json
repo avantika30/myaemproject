@@ -1,0 +1,43 @@
+
+    "jcr:primaryType": "cq:Page",
+    "jcr:createdBy": "admin",
+    "jcr:created": "Fri Aug 26 2022 12:27:51 GMT+0530",
+    "jcr:content": {
+      "jcr:primaryType": "cq:PageContent",
+      "jcr:createdBy": "admin",
+      "jcr:title": "Example Page",
+      "cq:template": "/conf/aempractice/settings/wcm/templates/base-page-template",
+      "jcr:created": "Fri Aug 26 2022 12:27:51 GMT+0530",
+      "cq:lastModified": "Fri Sep 16 2022 20:53:40 GMT+0530",
+      "sling:resourceType": "aempractice/components/structure/page",
+      "cq:lastModifiedBy": "admin",
+      "root": {
+        "jcr:primaryType": "nt:unstructured",
+        "responsivegrid": {
+          "jcr:primaryType": "nt:unstructured",
+          "jcr:createdBy": "admin",
+          "jcr:lastModifiedBy": "admin",
+          "jcr:created": "Thu Jun 10 2021 17:52:29 GMT+0530",
+          "jcr:lastModified": "Thu Jun 10 2021 17:53:57 GMT+0530",
+          "sling:resourceType": "wcm/foundation/components/responsivegrid",
+          "aem_practice": {
+            "jcr:primaryType": "nt:unstructured",
+            "jcr:createdBy": "admin",
+            "jcr:lastModifiedBy": "admin",
+            "jcr:created": "Fri Sep 16 2022 20:14:30 GMT+0530",
+            "title": "ExamplePage",
+            "jcr:lastModified": "Fri Sep 16 2022 20:53:40 GMT+0530",
+            "sling:resourceType": "aempractice/components/content/aem-practice",
+            "navigationList": {
+              "jcr:primaryType": "nt:unstructured",
+              "item0": {
+                "jcr:primaryType": "nt:unstructured",
+                "title": "tnvjkerv",
+                "page_path": "/content/commons/en/gd-blocks/header"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
